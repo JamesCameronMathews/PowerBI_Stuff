@@ -1,0 +1,54 @@
+## James Mathews
+## A stacked barplot with percentage text datalabels
+
+{
+  "data": {"name": "dataset"},
+  "width": 400,
+  "resolve": {"scale": {"color": "independent"}},
+  "transform": [
+    {
+      "joinaggregate": [{"op": "sum", "field": "Count of status_kpi_end_to_end", "as": "col_count"}],
+      "groupby": ["Month Short Name and Year"]
+    },
+    {
+      "joinaggregate": [{"op": "sum", "field": "Count of status_kpi_end_to_end", "as": "group_count"}],
+      "groupby": ["Month Short Name and Year", "status_kpi_end_to_end (groups)"]
+    },
+    {
+      "calculate": "datum.group_count / datum.col_count",
+      "as": "variety_percentage"
+    }
+  ],
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "y": { 
+          "type": "quantitative",
+          "field": "Count of status_kpi_end_to_end",
+          "stack": "zero",
+          "aggregate": "sum"
+        },
+        "x": {"type": "nominal", 
+        "field": "Month Short Name and Year"},
+        "color": {"field": "status_kpi_end_to_end (groups)", "type": "nominal"}
+      }
+    },
+    {
+      "mark": {"type": "text", "align": "center", "dy": 10},
+      "encoding": {
+        "y": { 
+          "type": "quantitative",
+          "field": "Count of status_kpi_end_to_end",
+          "stack": "zero",
+          "aggregate": "sum"
+        },
+        "x": {"type": "nominal", 
+        "field": "Month Short Name and Year"},
+        "text": {"field": "variety_percentage", "type": "quantitative", "format": ".1%"},
+        "color": {"field": "status_kpi_end_to_end (groups)", "type": "nominal", "scale": {"range": ["black"]}, "legend": null}
+        
+      }
+    }
+  ]
+}
