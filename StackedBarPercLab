@@ -4,65 +4,26 @@
 {
   "data": {"name": "dataset"},
   "width": 400,
+  "resolve": {"scale": {"color": "independent"}},
   "resolve": {
     "scale": {"color": "independent"}
   },
-  "transform": [
-    {
-      "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "Processes",
-          "as": "col_count"
-        }
-      ],
-      "groupby": [
-        "Month due"
-      ]
-    },
-    {
-      "stack": "Processes",
-      "groupby": [
-        "Month due"
-      ],
-      "as": [
-        "sum_Count of ID_start",
-        "sum_Count of ID_end"
-      ]
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "Processes",
-          "as": "group_count"
-        }
-      ],
-      "groupby": [
-        "Month due",
-        "Status"
-      ]
-    },
-    {
-      "calculate": "datum.group_count / datum.col_count",
-      "as": "variety_percentage"
-    },
-    {
-      "calculate": "(datum['sum_Count of ID_start'] + datum['sum_Count of ID_end']) / 2",
-      "as": "segment_mid"
-    }
-  ],
   "layer": [
     {
+      "mark": "bar",
       "mark": {"type": "bar"},
       "encoding": {
         "y": {
           "type": "quantitative",
+          "field": "Count of status_kpi_end_to_end",
           "field": "Processes",
           "stack": "zero",
           "aggregate": "sum",
           "axis": {"title": "Processes"}
         },
+        "x": {"type": "nominal", 
+        "field": "Month Short Name and Year"},
+        "color": {"field": "status_kpi_end_to_end (groups)", "type": "nominal"},
         "x": {
           "type": "nominal",
           "field": "Month due",
@@ -83,6 +44,16 @@
               "#F44336"
             ]
           }
+        },
+        "opacity": {
+          "condition": {
+            "test": {
+              "field": "__selected__",
+              "equal": "off"
+            },
+            "value": 0.3
+          },
+          "value": 1
         }
       }
     },
@@ -96,10 +67,16 @@
       "encoding": {
         "y": {
           "type": "quantitative",
+          "field": "Count of status_kpi_end_to_end",
           "field": "Processes",
           "stack": "zero",
           "aggregate": "sum"
         },
+        "x": {"type": "nominal", 
+        "field": "Month Short Name and Year"},
+        "text": {"field": "variety_percentage", "type": "quantitative", "format": ".1%"},
+        "color": {"field": "status_kpi_end_to_end (groups)", "type": "nominal", "scale": {"range": ["black"]}, "legend": null},
+
         "x": {
           "type": "nominal",
           "field": "Month due",
