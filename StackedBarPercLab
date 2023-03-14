@@ -4,26 +4,56 @@
 {
   "data": {"name": "dataset"},
   "width": 400,
-  "resolve": {"scale": {"color": "independent"}},
   "resolve": {
     "scale": {"color": "independent"}
   },
   "layer": [
     {
-      "mark": "bar",
-      "mark": {"type": "bar"},
+      "mark": 
+      {
+        "type": "bar",
+        "opacity": 0.3
+      },
       "encoding": {
         "y": {
           "type": "quantitative",
-          "field": "Count of status_kpi_end_to_end",
           "field": "Processes",
-          "stack": "zero",
-          "aggregate": "sum",
+          "stack": true,
           "axis": {"title": "Processes"}
         },
-        "x": {"type": "nominal", 
-        "field": "Month Short Name and Year"},
-        "color": {"field": "status_kpi_end_to_end (groups)", "type": "nominal"},
+        "x": {
+          "type": "nominal",
+          "field": "Month due",
+          "sort": null
+        },
+        "color": {
+          "field": "Status",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Complete Met KPI",
+              "Complete Missed KPI",
+              "Yet to be completed"
+            ],
+            "range": [
+              "#4CAF50",
+              "#FFC107",
+              "#F44336"
+            ]
+          }
+        }
+      }
+    },
+        {
+    "mark": {"type": "bar"},
+      "encoding": {
+        "y": {
+          "type": "quantitative",
+          "field": "Processes",
+          "stack": true,
+          "axis": {"title": "Processes"}
+        },
         "x": {
           "type": "nominal",
           "field": "Month due",
@@ -46,17 +76,22 @@
           }
         },
         "opacity": {
-          "condition": {
-            "test": {
-              "field": "__selected__",
-              "equal": "off"
-            },
-            "value": 0.3
-          },
-          "value": 1
+          "condition": [
+              { 
+                "field": "__selected__",
+                "oneOf": ["on", "neutral"],
+                "value": 1
+              },
+              {
+                "field": "datum['Percentage__highlight']",
+                "equal": 0,
+                "value": 1
+              },
+          "value": 0
+          ]
         }
       }
-    },
+    },  
     {
       "mark": {
         "type": "text",
@@ -67,16 +102,10 @@
       "encoding": {
         "y": {
           "type": "quantitative",
-          "field": "Count of status_kpi_end_to_end",
           "field": "Processes",
           "stack": "zero",
           "aggregate": "sum"
         },
-        "x": {"type": "nominal", 
-        "field": "Month Short Name and Year"},
-        "text": {"field": "variety_percentage", "type": "quantitative", "format": ".1%"},
-        "color": {"field": "status_kpi_end_to_end (groups)", "type": "nominal", "scale": {"range": ["black"]}, "legend": null},
-
         "x": {
           "type": "nominal",
           "field": "Month due",
