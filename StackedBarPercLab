@@ -1,5 +1,5 @@
 ## James Mathews
-## A stacked barplot with percentage text datalabels
+## A stacked barplot with percentage text datalabels, full interactivity
 
 {
   "data": {"name": "dataset"},
@@ -77,18 +77,16 @@
         },
         "opacity": {
           "condition": [
-              { 
-                "field": "__selected__",
-                "oneOf": ["on", "neutral"],
-                "value": 1
-              },
-              {
-                "field": "datum['Percentage__highlight']",
-                "equal": 0,
-                "value": 1
-              },
+            { 
+              "test": "datum['__selected__'] == 'on'",
+              "value": 1
+            },
+            { 
+              "test": "datum['__selected__'] == 'neutral' && datum['Count of status_kpi_end_to_end__highlight'] != null",
+              "value": 1
+            }
+          ],
           "value": 0
-          ]
         }
       }
     },  
