@@ -1,12 +1,23 @@
 ## James Mathews
 ## A stacked barplot with percentage text datalabels, full interactivity
-
 {
   "data": {"name": "dataset"},
   "width": 400,
   "resolve": {
     "scale": {"color": "independent"}
   },
+  "transform": [
+    {
+      "stack": "Processes",
+      "groupby": ["Month due"],
+      "as": ["lower", "upper"]
+  
+    },
+    {
+      "calculate": "((datum.lower + datum.upper)/2)",
+      "as": "bar_center"
+    }
+    ],  
   "layer": [
     {
       "mark": 
@@ -17,9 +28,13 @@
       "encoding": {
         "y": {
           "type": "quantitative",
-          "field": "Processes",
-          "stack": true,
+          "field": "upper",
+          "stack": null,
           "axis": {"title": "Processes"}
+        },
+        "y2": {
+          "type": "quantitative",
+          "field": "lower"
         },
         "x": {
           "type": "nominal",
@@ -45,14 +60,17 @@
         }
       }
     },
-        {
+    {
     "mark": {"type": "bar"},
       "encoding": {
         "y": {
           "type": "quantitative",
-          "field": "Processes",
-          "stack": true,
-          "axis": {"title": "Processes"}
+          "field": "upper",
+          "stack": null
+        },
+        "y2": {
+          "type": "quantitative",
+          "field": "lower"
         },
         "x": {
           "type": "nominal",
@@ -91,18 +109,16 @@
       }
     },  
     {
+
       "mark": {
-        "type": "text",
-        "align": "center",
-        "baseline": "line-top",
-        "dy": 10
+        "type": "text"
       },
       "encoding": {
         "y": {
           "type": "quantitative",
-          "field": "Processes",
-          "stack": "zero",
-          "aggregate": "sum"
+          "aggregate": "sum",
+          "field": "bar_center",
+          "stack": null
         },
         "x": {
           "type": "nominal",
@@ -117,7 +133,11 @@
         "color": {
           "field": "Status",
           "type": "nominal",
-          "scale": {"range": ["black"]},
+          "scale": {
+            "range": [
+              "black"
+            ]
+          },
           "legend": null
         }
       }
