@@ -91,7 +91,8 @@
               "#FFC107",
               "#F44336"
             ]
-          }
+          },
+          "legend": {"orient": "bottom"}
         },
         "opacity": {
           "condition": [
@@ -105,7 +106,8 @@
             }
           ],
           "value": 0
-        }
+        },
+        "legend": {"orient": "bottom-right"}
       }
     },  
     {
